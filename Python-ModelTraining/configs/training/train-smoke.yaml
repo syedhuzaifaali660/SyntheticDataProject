@@ -1,0 +1,8 @@
+model: models/yolo26n.pt
+epochs: 5
+patience: 5
+image_size: 640
+batch: 8
+workers: 2
+device: mps
+seed: 42

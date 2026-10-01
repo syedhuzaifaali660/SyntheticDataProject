@@ -1,0 +1,8 @@
+{
+  "name": "SyntheticData.EditModeTests",
+  "rootNamespace": "SyntheticData.Tests",
+  "references": ["SyntheticData.Runtime", "SyntheticData.Editor"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

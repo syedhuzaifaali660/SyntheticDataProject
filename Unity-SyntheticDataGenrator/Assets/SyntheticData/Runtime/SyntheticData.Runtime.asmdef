@@ -1,0 +1,6 @@
+{
+  "name": "SyntheticData.Runtime",
+  "rootNamespace": "SyntheticData",
+  "references": [],
+  "autoReferenced": true
+}

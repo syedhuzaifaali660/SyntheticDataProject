@@ -1,0 +1,13 @@
+model: models/yolo26n.pt
+dataset_yaml: data/prepared/mixed-device-6000-640-occlusion-safe-0907/dataset.yaml
+run_name: mixed-device-6000-640-occlusion-safe-0907-smoke
+runs_dir: runs
+epochs: 1
+patience: 1
+image_size: 640
+batch: 64
+nominal_batch_size: 64
+workers: 4
+device: mps
+seed: 42
+training_augmentation: true

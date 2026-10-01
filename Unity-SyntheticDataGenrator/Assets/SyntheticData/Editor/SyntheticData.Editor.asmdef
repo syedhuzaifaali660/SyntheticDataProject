@@ -1,0 +1,7 @@
+{
+  "name": "SyntheticData.Editor",
+  "rootNamespace": "SyntheticData.Editor",
+  "references": ["SyntheticData.Runtime"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": false
+}

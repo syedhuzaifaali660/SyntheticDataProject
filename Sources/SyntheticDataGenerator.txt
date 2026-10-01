@@ -1,0 +1,347 @@
+# tactiq.io free youtube transcript
+# Machine Learning with Synthetic Data | @unity  + @TensorFlow
+# https://www.youtube.com/watch/lHXcYhyhHGA
+
+00:00:00.030 okay so first we 3d scan the object
+00:00:02.250 throw it into unity and click Play unity
+00:00:04.859 labels everything automatically so we
+00:00:06.450 don't have to do anything by hand and
+00:00:07.830 then we train for eight or ten hours
+00:00:09.980 haha it works yes
+00:00:19.050 I wanted to play around with running
+00:00:21.869 machine learning models in unity again
+00:00:23.640 but I know if I do that I'm gonna want
+00:00:25.439 to train my own models now training your
+00:00:27.149 own model sucks because collecting data
+00:00:28.859 is a nightmare and having the label
+00:00:33.989 stuff by hand will make you want to kill
+00:00:35.790 yourself sick only 3,000 more these to
+00:00:39.629 go so the idea was synthetic data is you
+00:00:42.329 have a computer generate and label all
+00:00:44.400 the training data for you
+00:00:45.750 video game engines are perfect for this
+00:00:47.519 and unities ml agents already does this
+00:00:49.620 now the main thing holding back my ml
+00:00:51.690 projects is the fact that well I don't
+00:00:54.059 know about machine learning but the
+00:00:55.949 main thing holding back most other
+00:00:57.210 people's projects people that do know
+00:00:59.010 what they're doing is the fact that they
+00:01:00.390 don't have good data and it's really
+00:01:01.920 hard to come by now you know all the big
+00:01:03.960 companies like Apple Google Facebook
+00:01:05.600 they have all the data and if they don't
+00:01:08.100 have the data they have the resources to
+00:01:09.929 create that data you've probably heard
+00:01:11.550 the saying that data is the new oil now
+00:01:13.800 without getting too political you can
+00:01:15.509 see how synthetic data creation could
+00:01:17.520 help democratize technological
+00:01:19.470 advancement anyway in my case I want to
+00:01:22.080 train my own object detector so I'm
+00:01:24.060 going to use unity to generate and label
+00:01:26.250 all my images for me and then pass those
+00:01:28.619 to tensorflow
+00:01:29.369 for training and inference in Python so
+00:01:34.130 I want to be able to detect these
+00:01:36.390 Pokemon here but I'm gonna need a 3d
+00:01:38.459 model alright so here's a couple they
+00:01:41.759 aren't exactly the same but I don't know
+00:01:44.009 let's roll with them for now now we need
+00:01:45.869 bounding boxes so we can just use
+00:01:47.819 unities built-in function to get the
+00:01:49.470 bounds of the mesh renderer in the image
+00:01:51.300 piece of cake
+00:01:57.110 what so if we plot the 3d points of the
+00:02:00.390 renderers bounds you can see that they
+00:02:03.330 are with respect to the object and not
+00:02:04.950 the camera that's viewing the object 5
+00:02:08.550 this took a minute to figure out and
+00:02:10.800 it's not performant in any way shape or
+00:02:12.959 form but what I ended up doing was
+00:02:14.849 getting all the vertices of the object
+00:02:16.590 converting each point from world space
+00:02:18.810 to screen space and then finding the max
+00:02:20.849 and min a
+00:02:21.530 both the X and the y now we need to
+00:02:24.500 convert these boxes to a format that
+00:02:26.000 tensorflow can deal with so tensorflow
+00:02:30.530 needs everything in this TF record
+00:02:32.660 format that uses protocol buffers I have
+00:02:35.270 no idea what that is and I don't even
+00:02:37.250 want to know but they do give you some
+00:02:39.020 nice examples to work with so from unity
+00:02:41.540 we can take our pictures and write all
+00:02:43.190 that info to a file
+00:02:44.390 now these files will have the picture
+00:02:46.160 number window size the objects label and
+00:02:48.890 box coordinates then in Python we can
+00:02:51.709 use the TF record examples to write a
+00:02:53.900 script that parses our text file from
+00:02:56.269 unity and creates a TF record file from
+00:02:58.610 our synthetic training data beautiful
+00:03:02.650 now we can split our images into two
+00:03:05.030 folders with 20% of the total images
+00:03:07.550 into a test folder and the remaining
+00:03:09.590 images into a train folder the last file
+00:03:12.050 we need is a label map file it just Maps
+00:03:14.150 our objects labels to an ID for this I
+00:03:16.850 just loop through each object parent and
+00:03:18.530 find all the children with unique names
+00:03:20.360 and add them to a list and we write that
+00:03:22.730 to a file in the format that tensorflow
+00:03:24.560 wants now I trained an object detector
+00:03:26.840 once before to recognize some medical
+00:03:29.209 objects like 3 years ago and the only
+00:03:31.370 thing I remember about that project was
+00:03:33.079 that I could not get it to work at all
+00:03:34.640 until I took pictures with a ton of
+00:03:36.500 different background images I remember
+00:03:39.019 my first idea to get images was to take
+00:03:41.090 a video of the objects and then I made a
+00:03:43.130 Python script that just took frames out
+00:03:45.230 of the video this did not work even a
+00:03:47.690 little bit
+00:03:48.200 eventually I wised up and I took
+00:03:50.299 pictures with all different backgrounds
+00:03:51.709 and then it worked so in this case I
+00:03:54.350 used phat combate downloader to download
+00:03:56.720 a bunch of indoor images from Google and
+00:03:58.519 put them into unity I can loop through
+00:04:00.799 this folder and change the background
+00:04:02.269 every time unity takes a picture so at
+00:04:04.370 this point I have everything I need
+00:04:05.870 technically so the general consensus on
+00:04:10.190 Google seems to be that you need like a
+00:04:11.840 thousand images of each object and you
+00:04:14.000 need to train for like 20,000 steps
+00:04:15.590 which is gonna take like I don't know 10
+00:04:18.168 hours all right here we go it started
+00:04:21.410 alright this is fine we can handle this
+00:04:23.690 it won't be too long
+00:04:29.170 [Music]
+00:04:37.080 [Music]
+00:04:46.930 all right let's see we're at 2,000 steps
+00:04:50.660 what the
+00:05:08.910 [Music]
+00:05:16.050 [Music]
+00:05:21.440 all right moment of truth 27 thousand
+00:05:25.260 steps Wow
+00:05:27.990 literally nothing awesome honestly I'm
+00:05:31.320 not even upset right now because this is
+00:05:32.910 just how all my projects go so I really
+00:05:37.170 have no idea what the hell is going on
+00:05:38.760 here but my intuition is telling me that
+00:05:40.650 our 3d model is not similar enough to
+00:05:43.170 these toys that we're trying to track so
+00:05:44.790 I found this photo grandma tree app that
+00:05:46.380 lets you scan an object and generate a
+00:05:48.120 3d model I scanned all the objects and
+00:05:50.490 threw them into unity okay let's try
+00:05:52.620 this again
+00:05:56.040 [Music]
+00:06:01.380 [Music]
+00:06:04.510 okay well this this still sucks but at
+00:06:07.840 least it's working a little bit so we're
+00:06:09.970 on the right track alright so now we
+00:06:14.470 need to do some heavy experimentation
+00:06:16.420 and tweaking to see what gives us the
+00:06:18.220 best results
+00:06:18.880 I made this interface called I change
+00:06:20.620 bullet that has one function called
+00:06:22.180 change random every time we take a
+00:06:23.950 picture in unity we loop through all the
+00:06:25.780 objects in the scene and if they
+00:06:27.010 implement this interface we call this
+00:06:28.780 change random function so I made a bunch
+00:06:30.820 of scripts that just randomize
+00:06:32.200 everything one randomly changes the
+00:06:34.450 position of the objects in the image one
+00:06:36.700 changes lighting one changes the color
+00:06:38.770 of the object you get the idea I'm not
+00:06:41.290 exaggerating when I say I generated new
+00:06:43.270 data and trained this thing every single
+00:06:45.070 day for more than a month it just became
+00:06:47.260 part of my daily routine generate new
+00:06:49.480 images trained up I go to bed wake up
+00:06:52.720 test nothing works
+00:06:54.850 make some changes repeat I tried
+00:06:57.520 randomizing everything using different
+00:06:59.410 shaders to modify color changing the
+00:07:01.480 number of images the number of training
+00:07:03.160 steps I tried everything
+00:07:04.720 honestly the real reason I even decided
+00:07:06.580 to try this project was because I wanted
+00:07:08.380 to see if it was possible to make a
+00:07:10.090 robust detector from a single 3d object
+00:07:12.730 so currently were 3d scanning this
+00:07:14.650 object so it's only ever going to detect
+00:07:16.990 this exact object which it's pretty much
+00:07:19.690 just a waste of time because there are
+00:07:21.610 other better ways of doing this I
+00:07:23.430 originally thought if I could modify
+00:07:25.720 this mesh data randomly every picture
+00:07:27.520 that it might trick the model into
+00:07:29.380 detecting not just this Pikachu for
+00:07:31.720 example but maybe all different types of
+00:07:33.880 Pikachu's that exist so I played around
+00:07:35.980 with this a lot and I tried to deform
+00:07:37.840 the mesh in all different types of ways
+00:07:39.400 but I really never had any success so if
+00:07:41.980 anyone has any ideas on how to achieve
+00:07:43.330 something like this definitely let me
+00:07:45.370 know down in the comments or shoot me an
+00:07:46.930 email any way I can at least tell you
+00:07:48.400 from my experiments what did work first
+00:07:53.140 of all having a ton of different
+00:07:54.610 background images definitely helped so I
+00:07:57.010 ended up using 2500 background images
+00:07:59.350 and generating 5000 training images with
+00:08:02.200 20% used for testing it was also very
+00:08:04.570 important to change the position of the
+00:08:06.070 object in the image each time as well as
+00:08:08.470 having multiple objects in each image at
+00:08:10.660 the same time that was really important
+00:08:12.730 I also scanned each object twice so each
+00:08:15.280 Pokemon had two different versions of a
+00:08:17.200 scan
+00:08:17.600 I ended up changing each object's
+00:08:19.520 rotation randomly but only by like 20
+00:08:22.070 degrees in each direction any more than
+00:08:24.020 that gave me poor results I also did not
+00:08:26.960 use a directional light but instead I
+00:08:28.640 just used ambient seen light and I
+00:08:30.860 modified that intensity randomly for
+00:08:32.690 every picture the last thing that seemed
+00:08:34.490 to help a lot was changing the unity
+00:08:36.440 window size before tasting taking a
+00:08:38.120 picture so that all your images aren't
+00:08:39.799 the same size that way you can run
+00:08:41.479 inference on different devices different
+00:08:43.309 camera sizes and that shouldn't have an
+00:08:45.710 effect now there's a ton of other things
+00:08:47.420 I wanted to try with this but to
+00:08:49.280 actually see what works you can
+00:08:50.630 realistically only make one change at a
+00:08:52.730 time now each change you make takes
+00:08:54.440 about a day due to training time so you
+00:08:56.450 can see how absolutely frustrating this
+00:08:58.520 project was for me and why I needed to
+00:09:00.470 just make this video and get this
+00:09:02.330 project out of my life as quick as
+00:09:03.860 possible I just really don't know enough
+00:09:05.570 about machine learning and this project
+00:09:07.070 literally drove me crazy ultimately I
+00:09:09.320 can only get really the Bulbasaur and
+00:09:11.030 the squirtle to track well the Pikachu
+00:09:13.100 works sometimes but the Charmander just
+00:09:16.070 never works at all this project is a bit
+00:09:17.990 of a headache to even get it running so
+00:09:19.730 I'm gonna run through all the steps now
+00:09:21.170 in case anyone wants to try it out so
+00:09:24.530 first of all you need a good GPU to get
+00:09:26.330 this training I have trained an object
+00:09:28.040 detector with the Google cloud platform
+00:09:29.090 before but it was kind of a nightmare to
+00:09:31.310 get it set up and working so don't even
+00:09:32.990 try this on your Mac with tensorflow CPU
+00:09:35.120 the training will take days here I was
+00:09:37.100 using tensorflow GPU on this Windows
+00:09:39.350 machine that has a gtx 1070 even with
+00:09:42.260 this thing 20 to 20,000 training steps
+00:09:44.690 took like 10 hours so if you aren't
+00:09:46.370 scared yet let's try to get this running
+00:09:48.500 on your machine now I'll put all the
+00:09:49.880 links to everything I talked about down
+00:09:51.350 in the description below it's really
+00:09:53.120 important that you try to stick with the
+00:09:54.260 same versions I used because I ran into
+00:09:56.960 tons of compatibility issues with this
+00:09:58.790 project and it was an absolute nightmare
+00:10:01.600 so first of all make sure you're using
+00:10:03.710 python 3.5 64 bit install pip if you
+00:10:06.920 don't already have it and now you need
+00:10:08.630 tensorflow installed on your machine and
+00:10:10.280 also the tensorflow models directory you
+00:10:13.100 can follow the instructions to all that
+00:10:14.540 from here it might be a good idea to use
+00:10:16.760 anaconda in a virtual environment in
+00:10:18.620 addition to tensorflow there's a bunch
+00:10:20.240 of other dependencies that you need but
+00:10:22.100 i think you will want to stick with some
+00:10:23.690 tensorflow version before 2.0 personally
+00:10:26.300 I use tensorflow 1.8 and I installed it
+00:10:28.490 by running pip install tensorflow GP
+00:10:30.829 one point 8.0 I then got the models
+00:10:33.529 directory for tensorflow 1.8 from here
+00:10:35.720 to make sure you have open CV installed
+00:10:37.579 because we will use that to run
+00:10:38.929 inference on the model once it's done
+00:10:40.519 training now I installed it with pip
+00:10:42.619 install OpenCV Python once you have
+00:10:44.989 everything installed CD into the models
+00:10:46.939 research and run setup I build and setup
+00:10:50.839 I install CV into slim and run pip
+00:10:54.230 install - a dot now grab my synthetic
+00:10:57.019 data project on github and we have to
+00:10:58.879 create some data so first you need some
+00:11:00.769 background images so install the fat
+00:11:02.779 khont batch download Chrome extension
+00:11:04.790 and download like a thousand images make
+00:11:07.309 sure to go into your settings and turn
+00:11:08.629 off a square to save each file and put
+00:11:11.660 them in a folder called textures with
+00:11:13.129 the capital T and then drag that into
+00:11:14.989 your resources folder now either
+00:11:16.730 download a 3d model of what you want to
+00:11:18.499 track or create one I use this app
+00:11:20.899 called trineo you put the models that
+00:11:22.970 you want to use as a child of objects to
+00:11:25.339 train and position them in front of the
+00:11:27.199 camera add a change transform script and
+00:11:29.749 an object bound script drag in the
+00:11:32.360 custom GUI skin from the GUI folder open
+00:11:35.689 up the take picture script and change
+00:11:37.189 the total images to two thousand or
+00:11:39.829 something along those lines and then go
+00:11:41.779 back to the root folder and open up the
+00:11:43.459 TF utils folder in a text editor here we
+00:11:46.279 need to just change the number of
+00:11:47.389 classes that you have in the test
+00:11:49.249 detection pie script and then in the
+00:11:51.529 cocoa config script now go back to unity
+00:11:54.470 and hit play to generate all the
+00:11:56.119 training data now once that's done take
+00:11:58.220 your unity stuff folder from your
+00:11:59.959 streaming assets and put it into models
+00:12:02.089 flash research open up the research
+00:12:04.220 folder in a text editor and go to unity
+00:12:06.589 stuff slash the TF utils and open the
+00:12:09.170 object detection notes CD back into
+00:12:11.749 models research and run the pro talk
+00:12:13.610 line and the set Python path line now CB
+00:12:16.850 into unity stuff / TF utils and run
+00:12:19.730 create TF record pie now copy the
+00:12:22.369 trained PI command and run that now we
+00:12:24.379 wait for like 20 thousand steps or so
+00:12:26.299 once you've trained your model for long
+00:12:28.009 enough go to trained output and find the
+00:12:30.110 checkpoint number that you want and put
+00:12:32.059 that number in the export inference
+00:12:33.589 graph line and run that finally we can
+00:12:36.290 run test detection pie
+00:12:41.879 all right so that's it that's all I got
+00:12:44.110 for today if you want to learn more
+00:12:45.430 about this type of stuff definitely
+00:12:47.379 check out jameson tools article on
+00:12:49.209 heartbeat fritz AI where he used unity
+00:12:52.060 to generate synthetic data to track coke
+00:12:54.009 cans and also check out adam kelly's
+00:12:56.620 project on immersive limit where he used
+00:12:58.689 synthetic data to detect weeds in his
+00:13:00.490 yard so yeah let me know what you guys
+00:13:01.959 want to see in the next one down in the
+00:13:03.430 comments below and with that we'll see
+00:13:05.740 you in the next video goodbye
+00:13:09.940 [Music]
+00:13:26.450 [Music]

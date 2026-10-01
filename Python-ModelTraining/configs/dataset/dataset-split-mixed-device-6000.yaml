@@ -1,0 +1,8 @@
+# Deterministic 4,800 / 900 / 300 split for mixed-device-6000-640.
+seed: 42
+train_ratio: 0.8
+val_ratio: 0.15
+test_ratio: 0.05
+target_train_images: 4800
+target_val_images: 900
+target_test_images: 300

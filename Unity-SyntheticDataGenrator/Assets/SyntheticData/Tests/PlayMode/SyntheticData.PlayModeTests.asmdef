@@ -1,0 +1,8 @@
+{
+  "name": "SyntheticData.PlayModeTests",
+  "rootNamespace": "SyntheticData.Tests",
+  "references": ["SyntheticData.Runtime"],
+  "includePlatforms": [],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

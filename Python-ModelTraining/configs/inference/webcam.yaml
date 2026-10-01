@@ -1,0 +1,7 @@
+checkpoint: runs/baseline-3900/weights/best.pt
+camera_index: 0
+confidence: 0.50
+image_size: 640
+device: mps
+save_low_confidence: false
+low_confidence_directory: runs/webcam-review
