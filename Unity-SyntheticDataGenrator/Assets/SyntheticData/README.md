@@ -14,10 +14,28 @@ Python detector pipeline.
 5. Inspect `Assets/SyntheticData/Config/BaselineGeneration.asset` for the
    resolved generation ranges and validation limits.
 
-The baseline asset uses seed 42 and 640x640 output. Background images and
-Pokemon 3D models are local-only assets excluded from Git. Supply compatible
-assets under `Assets/Data/Background/` and `Assets/Data/Models/` (including the
-expected Pokemon model files) before capturing a run. A sampled `FrameRecipe`
+The baseline asset uses seed 42, 640x640 output, and 98 backgrounds. Background
+images and Pokemon 3D models are local-only assets excluded from Git. To use the
+baseline scene, supply 98 background image files with unique filenames under
+`Assets/Data/Background/`, plus these GLB models under
+`Assets/Data/Models/Pokemon/`:
+
+```text
+pikachu.glb
+charmander.glb
+squirtle.glb
+```
+
+The project uses each background filename (without its extension) as its stable
+background ID. If you have fewer backgrounds, update `BackgroundCount` in
+`Assets/SyntheticData/Config/BaselineGeneration.asset` to match the imported
+catalog. Unity `.meta` files preserve the asset GUIDs referenced by the scene
+and Pokémon prefabs. Restore the original image/model `.meta` sidecars from your
+local backup when possible; if you use new assets, assign the background
+textures in `PokemonCapture.unity` and the GLB models in the
+`Assets/SyntheticData/Prefabs/` prefabs. Use assets you have permission to use;
+the original background and character assets are not redistributed by this
+repository. A sampled `FrameRecipe`
 contains all randomness needed for one frame: its derived seed, background,
 Pokemon classes and transforms, camera field of view, and lighting values.
 Scene objects must not sample additional randomness independently.

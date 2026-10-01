@@ -33,6 +33,15 @@ The generated datasets, prepared datasets, run outputs, checkpoints, and local
 environment are intentionally ignored by Git. Preserve an accepted local run if
 you need to compare regenerated reports with it.
 
+These paths describe artifacts from the original development workspace. They
+are not included in a fresh clone, so commands below that use `baseline-3900`
+or `mixed-device-6000-640-occlusion-safe-0907` require you to recreate those
+runs and splits first, or obtain them from a separate trusted artifact backup.
+To create new data, first supply the Unity backgrounds and Pokémon models listed
+in the Unity guide, then generate a run and validate it before splitting or
+training. The commands that assume the accepted local artifacts are examples of
+that recorded workflow, not a downloadable dataset bundled with this repo.
+
 ## Validate a Unity Run
 
 For mixed-device capture with a live counter and a retained Unity log, run:
@@ -139,6 +148,13 @@ at 640-pixel image size, uses seed 42, and selects Apple MPS. Training writes th
 resolved configuration, environment metadata, metrics, and weights beneath
 `runs/baseline-3900`.
 
+The training configuration points to `models/yolo26n.pt`, which is excluded
+from Git. Supply that starting checkpoint locally; obtaining it from an
+upstream source requires network access unless you already have a copy. The
+checked-in training configurations select MPS; use a compatible Apple Silicon
+Mac for that setup, or change the `device` value to `cpu`. This project currently
+accepts only `mps` and `cpu` as training devices.
+
 MPS includes an accumulation operation without a deterministic implementation.
 The inputs, split, seed, and configuration are reproducible, but checkpoint
 bytes and final floating-point metrics are not guaranteed to be bit-identical.
@@ -189,6 +205,11 @@ and 50-image failure gallery under
 
 `configs/inference/webcam.yaml` points to the accepted checkpoint and sets camera 0,
 confidence 0.50, image size 640, and the MPS device.
+
+The checkpoint and generated dataset referenced by this config are local-only
+and are not in Git. After recreating or restoring the checkpoint, update the
+config path if your run has a different name. Webcam inference also requires an
+available camera and a desktop session that can show OpenCV's preview window.
 
 ```bash
 uv run python -m pokemon_detector.cli.webcam \

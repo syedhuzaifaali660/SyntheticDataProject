@@ -8,14 +8,14 @@ The project combines a Unity synthetic data generator, a Python training and eva
 
 - **Unity generator** (`Unity-SyntheticDataGenrator/`) creates rendered images, YOLO bounding-box labels, a JSON Lines manifest, and a resolved run configuration. See the [Unity operating guide](Unity-SyntheticDataGenrator/Assets/SyntheticData/README.md).
 - **Python pipeline** (`Python-ModelTraining/`) validates captures, reviews annotations, creates background-grouped dataset splits, trains and evaluates YOLO26n, and supports webcam inference. See the [Python operating guide](Python-ModelTraining/README.md).
-- **iOS app** (`Xcode-PokemonDetector/PokemonDetector/`) runs Core ML object detection using the device camera. Its source and two trained Core ML model packages are included.
+- **iOS app** (`Xcode-PokemonDetector/PokemonDetector/`) runs Core ML object detection using the device camera. Its source and two trained Core ML model packages are included. See the [iOS guide](Xcode-PokemonDetector/README.md) for build requirements and model selection.
 - **Project records** (`Plan/`, `TaskCompleted/`) contain design notes, implementation plans, and completed work records.
 
 ## Getting started
 
 ### Generate data
 
-Open `Unity-SyntheticDataGenrator` with Unity **6000.3.8f1** and follow the [Unity guide](Unity-SyntheticDataGenrator/Assets/SyntheticData/README.md) to generate a new run. The guide covers editor and batch-mode capture, validation, and Unity tests.
+Open `Unity-SyntheticDataGenrator` with Unity **6000.3.8f1**, supply the local-only backgrounds and Pokémon models described in the [Unity guide](Unity-SyntheticDataGenrator/Assets/SyntheticData/README.md), then follow that guide to generate a new run. It covers editor and batch-mode capture, validation, and Unity tests.
 
 ### Train and evaluate
 
@@ -27,7 +27,7 @@ uv sync
 uv run python -m pokemon_detector.cli.validate --help
 ```
 
-For the complete workflow, including annotation review, dataset splitting, training, evaluation, and webcam inference, see the [Python operating guide](Python-ModelTraining/README.md).
+For the complete workflow, including annotation review, dataset splitting, training, evaluation, and webcam inference, see the [Python operating guide](Python-ModelTraining/README.md). The accepted example datasets, checkpoints, and experiment outputs referenced there are local artifacts and are not part of a fresh clone.
 
 ### Run the iOS app
 
@@ -45,4 +45,4 @@ Generated datasets, training runs, checkpoints, and evaluation images can be ver
 
 This project uses Pokémon names, characters, and related 3D assets. Pokémon is a third-party intellectual property; review the rights and licenses for the character models, backgrounds, textures, dependencies, and any included model files before redistributing them publicly. A public repository does not grant rights to those materials.
 
-No project license is declared yet. Add a `LICENSE` file that matches your intended reuse terms before inviting contributions or presenting the code as open source. Third-party assets may have separate terms.
+No project license is declared yet. The repository does not currently grant general reuse permission; add a `LICENSE` file matching your intended terms before inviting contributions or presenting the code as open source. Third-party assets and trained models may have separate terms.
